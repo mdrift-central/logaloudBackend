@@ -44,6 +44,7 @@ def mobile_login(request):
 @csrf_exempt
 def mobile_signup(request):
 	print request.POST
+	err = ""
 	username = request.POST.get('username')
 	if User.objects.filter(username=username).exists():
 		return HttpResponse(content=json.dumps({'result':'false', 'data':{}, 'message':'Username is already in use.Please use a different one.'}), status=200, content_type="application/json")
@@ -181,15 +182,21 @@ def get_what_we_have(request):
 @csrf_exempt
 def get_featured(request):
 	print request.POST
-	all_entries = Listing.objects.all()
+	all_entries = Listing.objects.filter(listing_type='Featured')
 	result = []
 	for entry in all_entries:
 		listing = {}
 		listing['owner'] = str(entry.owner.username)
 		listing['listing_type'] = str(entry.listing_type)
 		listing['street'] = str(entry.listing_address.street)
+		listing['listing_title'] = str(entry.listing_short_title)
+		thumbnail = Media.objects.filter(listing = entry, media_type='thumbnail')
+		if not thumbnail:
+			listing['thumbnail_url'] = 'http://i.imgur.com/pcvBkWy.jpg'
+		else:
+			listing['thumbnail_url'] = str(thumbnail[0].image_path)
 		result.append(listing)
 	print result
-	return HttpResponse(content=json.dumps({'result':'false', 'data':result, 'message':'Server error.'}), status=200, content_type="application/json")
+	return HttpResponse(content=json.dumps({'result':'false', 'data':result, 'message':'No Specific Message. Happy weekend!'}), status=200, content_type="application/json")
 
 

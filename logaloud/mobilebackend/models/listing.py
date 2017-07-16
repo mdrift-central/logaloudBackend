@@ -8,7 +8,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from .address import Address
 
-LISTING_TYPES = (('Normal','Normal'),('Ally','Ally'),('Admin_test','Admin_test'),('Great Perks','Great Perks'))
+LISTING_TYPES = (('Normal','Normal'),('Ally','Ally'),('Admin_test','Admin_test'),('Great Perks','Great Perks'),('Featured','Featured'))
 
 
 class Listing(models.Model):
