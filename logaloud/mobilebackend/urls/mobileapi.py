@@ -13,5 +13,5 @@ urlpatterns = [
     url(r'^get_allies_perks$',view.get_allies_and_perks),
 	# get_featured
 	url(r'^get_featured$',view.get_featured),
-
+	url(r'^get_listing_detail$',view.get_listing_detail),
 ]

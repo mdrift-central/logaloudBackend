@@ -10,6 +10,8 @@ from django.conf import settings
 from django.db import transaction
 import uuid, os
 import json, traceback, sys
+from django.db.models import Q
+
 
 @csrf_exempt
 def hi(request):
@@ -202,5 +204,37 @@ def get_featured(request):
 			result.append(listing)
 	print result
 	return HttpResponse(content=json.dumps({'result':result_bool, 'data':result, 'message':'No Specific Message. Happy weekend!'}), status=200, content_type="application/json")
+
+
+@csrf_exempt
+def get_listing_detail(request):
+	print request.POST
+	listing_id = request.POST.get('listing_id')
+	current_listing = Listing.objects.get(pk=listing_id)
+	result = {}
+	result_bool = 'true'
+	if not current_listing:
+		result_bool = 'false'
+	else:
+		result['listing_name'] = current_listing.listing_name
+		result['listing_title'] = current_listing.listing_short_title
+		result['listing_description'] = 'test'
+		'''Poll.objects.get(
+    Q(pub_date=date(2005, 5, 2)) | Q(pub_date=date(2005, 5, 6)),
+    question__startswith='Who',
+		)
+		(listing = current_listing, media_type='featured_cover') | (listing = current_listing, media_type='Gallery')
+
+
+		'''
+		thumbnail = Media.objects.filter(Q(media_type='featured_cover') | Q(media_type='Gallery'), listing=current_listing)
+		print thumbnail
+		if thumbnail:
+			result['thumbnail_url'] = str(thumbnail[0].image_path)
+		else:
+			result['thumbnail_url'] = "http://i.imgur.com/pcvBkWy.jpg"
+	print result
+	return HttpResponse(content=json.dumps({'result':result_bool, 'data':result, 'message':'No Specific Message. Happy weekend!'}), status=200, content_type="application/json")
+
 
 
