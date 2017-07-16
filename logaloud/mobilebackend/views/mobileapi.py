@@ -184,19 +184,23 @@ def get_featured(request):
 	print request.POST
 	all_entries = Listing.objects.filter(listing_type='Featured')
 	result = []
-	for entry in all_entries:
-		listing = {}
-		listing['owner'] = str(entry.owner.username)
-		listing['listing_type'] = str(entry.listing_type)
-		listing['street'] = str(entry.listing_address.street)
-		listing['listing_title'] = str(entry.listing_short_title)
-		thumbnail = Media.objects.filter(listing = entry, media_type='thumbnail')
-		if not thumbnail:
-			listing['thumbnail_url'] = 'http://i.imgur.com/pcvBkWy.jpg'
-		else:
-			listing['thumbnail_url'] = str(thumbnail[0].image_path)
-		result.append(listing)
+	result_bool = 'false'
+	print all_entries.count()
+	if all_entries.count() > 0:
+		result_bool = 'true'
+		for entry in all_entries:
+			listing = {}
+			listing['owner'] = str(entry.owner.username)
+			listing['listing_type'] = str(entry.listing_type)
+			listing['street'] = str(entry.listing_address.street)
+			listing['listing_title'] = str(entry.listing_short_title)
+			thumbnail = Media.objects.filter(listing = entry, media_type='thumbnail')
+			if not thumbnail:
+				listing['thumbnail_url'] = 'http://i.imgur.com/pcvBkWy.jpg'
+			else:
+				listing['thumbnail_url'] = str(thumbnail[0].image_path)
+			result.append(listing)
 	print result
-	return HttpResponse(content=json.dumps({'result':'false', 'data':result, 'message':'No Specific Message. Happy weekend!'}), status=200, content_type="application/json")
+	return HttpResponse(content=json.dumps({'result':result_bool, 'data':result, 'message':'No Specific Message. Happy weekend!'}), status=200, content_type="application/json")
 
 
