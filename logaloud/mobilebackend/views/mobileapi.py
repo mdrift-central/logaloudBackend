@@ -103,7 +103,20 @@ def get_great_perks(request):
 			listing['id'] = str(entry.pk)
 			'''listing['image_url'] = str(cover_image.id)'''
 			allylist_main = []
-			allylist_main_1 = {}
+			
+			print str(entry.listing_name)
+			connections = BConnection.objects.filter(listing=entry)
+			print "Connections ", connections
+			i = 0
+			for connection in connections:
+				allylist_main_1 = {}
+				print connection
+				allylist_main_1['ally_name'] = str(connection.ally.listing_name)
+				thumbnail = Media.objects.filter(listing = connection.ally, media_type='thumbnail')
+				allylist_main_1['thumbnail_url'] = str(thumbnail[0].image_path)
+				allylist_main.append(allylist_main_1)				
+				i = i + 1
+
 			'''global b_connections 
 			b_connections = BConnection.objects.filter(listing=entry)
 			i = 0
@@ -115,8 +128,9 @@ def get_great_perks(request):
 				i = i + 1
 				allylist_main.append(allylist_main_1)
 			listing['allylist'] = allylist_main'''
+			listing['allies'] = allylist_main
 			result.append(listing)
-	return HttpResponse(content=json.dumps({'result':'true', 'data':result, 'message':'Server request succesful.'}), status=200, content_type="application/json")
+	return HttpResponse(content=json.dumps({'result':'true', 'result':result, 'message':'Server request succesful.'}), status=200, content_type="application/json")
 
 @csrf_exempt
 def get_allies_and_perks(request):
