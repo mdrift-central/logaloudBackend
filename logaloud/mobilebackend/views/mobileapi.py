@@ -194,7 +194,7 @@ def get_featured(request):
 			listing['listing_type'] = str(entry.listing_type)
 			listing['street'] = str(entry.listing_address.street)
 			listing['listing_title'] = str(entry.listing_short_title)
-			thumbnail = Media.objects.filter(listing = entry, media_type='thumbnail')
+			thumbnail = Media.objects.filter(listing = entry, media_type='featured_cover')
 			if not thumbnail:
 				listing['thumbnail_url'] = 'http://i.imgur.com/pcvBkWy.jpg'
 			else:
