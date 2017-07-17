@@ -196,6 +196,7 @@ def get_featured(request):
 			listing['listing_type'] = str(entry.listing_type)
 			listing['street'] = str(entry.listing_address.street)
 			listing['listing_title'] = str(entry.listing_short_title)
+			listing['id'] = str(entry.pk)
 			thumbnail = Media.objects.filter(listing = entry, media_type='featured_cover')
 			if not thumbnail:
 				listing['thumbnail_url'] = 'http://i.imgur.com/pcvBkWy.jpg'
@@ -219,6 +220,7 @@ def get_listing_detail(request):
 		result['listing_name'] = current_listing.listing_name
 		result['listing_title'] = current_listing.listing_short_title
 		result['listing_description'] = 'test'
+		result['id'] = current_listing.pk
 		'''Poll.objects.get(
     Q(pub_date=date(2005, 5, 2)) | Q(pub_date=date(2005, 5, 6)),
     question__startswith='Who',
